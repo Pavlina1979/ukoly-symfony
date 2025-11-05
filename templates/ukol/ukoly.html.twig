@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Seznam úkolů{% endblock %}
+
+{% block body %}
+{% for message in app.flashes('zprava') %}
+    <div data-mdb-alert-init="" class="alert alert-success" role="alert" data-mdb-color="success" data-mdb-alert-initialized="true">
+       {{ message }}
+    </div>
+{% endfor %}
+<div class="mb-4 d-flex align-items-center">
+<h1 class="me-5">Seznam úkolů</h1>
+<a href="{{ path('ukol_novy')}}" class="btn btn-primary">Nový úkol</a>
+</div>
+
+
+
+  <div class="d-flex justify-content-end gap-3 mb-4">
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Sařezení dle jména
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="{{ path('ukoly_dle_jmena_asc')}}">Abecedně vzestupně</a></li>
+        <li><a class="dropdown-item" href="{{ path('ukoly_dle_jmena_desc')}}">Abecedně sestupně</a></li>
+      </ul>
+    </div>
+
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Filtrování dle statusu úkolů
+      </button>
+      <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="{{ path('ukoly')}}">Zobrazit všechny úkoly</a></li>
+        <li><a id="test" class="dropdown-item" href="{{ path('ukoly_hotove')}}">Hotové úkoly</a></li>
+        <li><a class="dropdown-item" href="{{ path('ukoly_cekajici')}}">Čekající ukoly</a></li>
+      </ul>
+    </div>
+  </div>
+
+
+{% if ukoly|length < 1 %}
+  Tož hola hou, nebuďte líní a naplánujte si nějaký úkol
+{% endif %}
+
+
+
+
+<div class="accordion" id="accordionExample">
+    {% for ukol in ukoly %}
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+        <button class="accordion-button d-flex {{ loop.first ? '' : 'collapsed' }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="{{ loop.first ? 'true' : 'false' }}" aria-controls="collapse{{ loop.index }}">
+            <strong>{{ ukol.nazev }}</strong>
+        </button>
+        </h2>
+        <div id="collapse{{ loop.index }}" class="accordion-collapse collapse {{ loop.first ? 'show' : '' }}" data-bs-parent="#accordionExample">
+        <div class="accordion-body row justify-content-between align-items-center">
+            <div class="col-lg-6">{{ ukol.popis }}</div>
+
+            <div class="col-lg-6 d-flex align-items-center">
+                {% if ukol.dokonceno == false %}<div class="ms-auto me-4">Hotovo do: {{ ukol.dokdy|date("d. m. Y") }}</div>{% endif %}
+                <div class="me-4 {{ ukol.dokonceno ? 'ms-auto' : '' }}  ">
+                    {% if ukol.dokonceno %}
+                        <span class="badge rounded-pill text-bg-success">Hotovo</span>
+                    {% else %}
+                        <span class="badge rounded-pill text-bg-danger">Udělat</span>
+                    {% endif %}
+                </div> 
+                <div class="d-flex">
+                    <a class="me-3 btn btn-warning" href="{{ path('ukol_upravit', {'id': ukol.id}) }}">Upravit úkol</a>
+                    <a class="btn btn-danger" href="{{ path('ukol_smazat', {'id': ukol.id}) }}">Smazat úkol</a>
+                </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+

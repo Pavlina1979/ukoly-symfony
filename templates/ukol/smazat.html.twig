@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme formular 'bootstrap_5_layout.html.twig' %}
+
+{% block title %}Přidat nový úkol{% endblock %}
+
+{% block body %}
+<h1 class="mb-4">Přidat nový úkol</h1>
+
+{{ form(formular, {'attr': {'novalidate': 'novalidate'}}) }}
+
+{% endblock %}

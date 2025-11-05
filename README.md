@@ -1,0 +1,1 @@
+# Jednoduchý plánovač úkolý napsaný v Symfony
