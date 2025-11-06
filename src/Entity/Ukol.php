@@ -24,6 +24,7 @@ class Ukol
     private ?string $popis = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Prosím vyplňte datum')]
     private ?\DateTime $dokdy = null;
 
     #[ORM\Column]
@@ -63,7 +64,7 @@ class Ukol
         return $this->dokdy;
     }
 
-    public function setDokdy(\DateTime $dokdy): static
+    public function setDokdy(?\DateTime $dokdy): static
     {
         $this->dokdy = $dokdy;
 
